@@ -7,6 +7,14 @@ from spreadsheet.forms import ColumnForm, RowForm
 from spreadsheet.models import SpreadSheet2, SpreadSheetRow, SpreadSheetColumn
 
 
+def home(request):
+    sheets = SpreadSheet2.objects.all()
+    context = {
+        'sheets': sheets
+    }
+    return render(request, 'spreadsheet/all_sheets.html', context)
+
+
 def display_sheet(request, sheet_id):
     try:
         sheet = SpreadSheet2.objects.get(id=sheet_id)

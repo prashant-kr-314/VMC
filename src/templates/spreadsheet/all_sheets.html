@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>All Sheets</h1>
+{% for sheet in sheets %}
+    <a href="{% url 'spreadsheet:display_sheet' sheet.id %}">{{ sheet.name }}</a>
+{% endfor %}
+</body>
+</html>

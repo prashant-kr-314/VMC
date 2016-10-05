@@ -2,6 +2,7 @@ from django.conf.urls import url
 import views
 
 urlpatterns = [
+    url(r'^$', views.home, name='all_sheets'),
     url(r'^display/(?P<sheet_id>[0-9]+)/$', views.display_sheet, name='display_sheet'),
     url(r'^add_column/(?P<sheet_id>[0-9]+)/$', views.add_column, name='add_column'),
     url(r'^delete_column/(?P<sheet_id>[0-9]+)/$', views.delete_column, name='delete_column'),
