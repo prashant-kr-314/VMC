@@ -7,7 +7,14 @@
 <body>
 <h1>All Sheets</h1>
 {% for sheet in sheets %}
-    <a href="{% url 'spreadsheet:display_sheet' sheet.id %}">{{ sheet.name }}</a>
+    <a href="{% url 'spreadsheet:display_sheet' sheet.id %}">{{ sheet.name }}</a><br>
 {% endfor %}
+
+<h2>Add Sheet</h2>
+<form method="post" action="{% url 'spreadsheet:all_sheets' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

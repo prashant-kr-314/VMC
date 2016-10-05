@@ -1,7 +1,13 @@
 from django import forms
-from spreadsheet.models import SpreadSheetColumn
+from spreadsheet.models import SpreadSheetColumn, SpreadSheet2
 from datetime import timedelta
 from django.utils import timezone
+
+
+class SpreadSheetForm(forms.ModelForm):
+    class Meta:
+        model = SpreadSheet2
+        fields = ['name']
 
 
 class ColumnForm(forms.ModelForm):

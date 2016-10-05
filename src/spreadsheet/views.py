@@ -3,15 +3,20 @@ from django.db.models.functions import Coalesce
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 
-from spreadsheet.forms import ColumnForm, RowForm
+from spreadsheet.forms import ColumnForm, RowForm, SpreadSheetForm
 from spreadsheet.models import SpreadSheet2, SpreadSheetRow, SpreadSheetColumn
 
 
 def home(request):
     sheets = SpreadSheet2.objects.all()
+    form = SpreadSheetForm(request.POST or None)
     context = {
-        'sheets': sheets
+        'sheets': sheets,
+        'form': form
     }
+    if request.POST and form.is_valid():
+        new_sheet = form.save()
+        return HttpResponseRedirect('/display/' + str(new_sheet.id))
     return render(request, 'spreadsheet/all_sheets.html', context)
 
 
