@@ -2,6 +2,7 @@ from django.db.models.aggregates import Max
 from django.db.models.functions import Coalesce
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 
 from spreadsheet.forms import ColumnForm, RowForm, SpreadSheetForm
 from spreadsheet.models import SpreadSheet2, SpreadSheetRow, SpreadSheetColumn
@@ -18,6 +19,17 @@ def home(request):
         new_sheet = form.save()
         return HttpResponseRedirect('/display/' + str(new_sheet.id))
     return render(request, 'spreadsheet/all_sheets.html', context)
+
+
+@require_POST
+def delete_sheet(request):
+    sheet_id = request.POST.get('sheet_id')
+    try:
+        sheet = SpreadSheet2.objects.get(id=sheet_id)
+    except:
+        return HttpResponseNotFound("<h1>Not Found</h1>")
+    sheet.delete()
+    return HttpResponseRedirect('/')
 
 
 def display_sheet(request, sheet_id):

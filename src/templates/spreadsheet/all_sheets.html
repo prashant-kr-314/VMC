@@ -7,7 +7,12 @@
 <body>
 <h1>All Sheets</h1>
 {% for sheet in sheets %}
-    <a href="{% url 'spreadsheet:display_sheet' sheet.id %}">{{ sheet.name }}</a><br>
+    <a href="{% url 'spreadsheet:display_sheet' sheet.id %}">{{ sheet.name }}</a>
+    <form method="post" action="{% url 'spreadsheet:delete_sheet' %}">
+    {% csrf_token %}
+    <input type="hidden" name="sheet_id" value="{{ sheet.id }}">
+    <input type="submit" value="Delete">
+    </form>
 {% endfor %}
 
 <h2>Add Sheet</h2>
