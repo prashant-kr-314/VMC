@@ -37,7 +37,7 @@ class SpreadSheet2(models.Model):
             return columns, sheet_data
 
     def get_columns(self):
-        return self.spreadsheetcolumn_set.all().order_by('sort_id').prefetch_related('spreadsheetrow_set')
+        return self.spreadsheetcolumn_set.all().order_by('sort_id', 'id').prefetch_related('spreadsheetrow_set')
 
 
 class SpreadSheetColumn(models.Model):

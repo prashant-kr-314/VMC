@@ -9,6 +9,7 @@ from spreadsheet.models import SpreadSheet2, SpreadSheetRow, SpreadSheetColumn
 import uuid
 import csv
 
+
 def home(request):
     sheets = SpreadSheet2.objects.all()
     form = SpreadSheetForm(request.POST or None)
@@ -51,6 +52,7 @@ def display_sheet(request, sheet_id):
     }
     return render(request, 'spreadsheet/display_sheet.html', context)
 
+
 def display_csv(request, sheet_id):
     try:
         sheet = SpreadSheet2.objects.get(id=sheet_id)
@@ -75,6 +77,8 @@ def display_csv(request, sheet_id):
     for row in list_list_row:
         writer.writerow(row)
     return response_csv
+
+
 def add_column(request, sheet_id):
     try:
         sheet = SpreadSheet2.objects.get(id=sheet_id)
@@ -164,7 +168,7 @@ def edit_row(request, sheet_id, row_id):
     except:
         return HttpResponseNotFound("<h1>Not Found</h1>")
     columns = sheet.get_columns()
-    row_data = SpreadSheetRow.objects.filter(row_number=row_id).order_by('column__sort_id')
+    row_data = SpreadSheetRow.objects.filter(row_number=row_id).order_by('column__sort_id', 'column__id')
     if not row_data:
         return HttpResponseNotFound("<h1>Not Found</h1>")
     initial_data = zip(columns, row_data)
