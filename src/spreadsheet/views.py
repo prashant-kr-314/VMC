@@ -1,12 +1,13 @@
 from django.db.models.aggregates import Max
 from django.db.models.functions import Coalesce
-from django.http.response import HttpResponseNotFound, HttpResponseRedirect
+from django.http.response import HttpResponseNotFound, HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
 from spreadsheet.forms import ColumnForm, RowForm, SpreadSheetForm
 from spreadsheet.models import SpreadSheet2, SpreadSheetRow, SpreadSheetColumn
-
+import uuid
+import csv
 
 def home(request):
     sheets = SpreadSheet2.objects.all()
@@ -50,7 +51,30 @@ def display_sheet(request, sheet_id):
     }
     return render(request, 'spreadsheet/display_sheet.html', context)
 
-
+def display_csv(request, sheet_id):
+    try:
+        sheet = SpreadSheet2.objects.get(id=sheet_id)
+    except:
+        return HttpResponseNotFound("<h1>Not Found</h1>")
+    list_cols=[]
+    list_row=[]
+    list_list_row=[]
+    columns, sheet_data = sheet.get_sheet_data()
+    for column in columns:
+        list_cols.append(column.name)
+    for row_num, row in sheet_data:
+        list_row=[]
+        for cell in row:
+            list_row.append(cell.value)
+        list_list_row.append(list_row)
+    response_csv = HttpResponse(content_type='text/csv')
+    a=str(uuid.uuid4())+".csv"
+    response_csv['Content-Disposition'] = "attachment; filename=%s"%a
+    writer = csv.writer(response_csv)
+    writer.writerow(list_cols)
+    for row in list_list_row:
+        writer.writerow(row)
+    return response_csv
 def add_column(request, sheet_id):
     try:
         sheet = SpreadSheet2.objects.get(id=sheet_id)

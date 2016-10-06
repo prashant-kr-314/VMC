@@ -53,5 +53,7 @@
     {{ add_row_form.as_p }}
     <input type="submit" value="Submit">
 </form>
+<h3>Download File</h3>
+<input type="button" value = "Download table" onclick="window.location='{% url 'spreadsheet:display_csv' sheet.id %}'" />
 </body>
 </html>
