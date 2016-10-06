@@ -1,6 +1,6 @@
 from django.db.models.aggregates import Max
 from django.db.models.functions import Coalesce
-from django.http.response import HttpResponseNotFound, HttpResponseRedirect
+from django.http.response import HttpResponseNotFound, HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
