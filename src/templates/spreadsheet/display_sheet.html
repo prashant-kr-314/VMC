@@ -53,5 +53,10 @@
     {{ add_row_form.as_p }}
     <input type="submit" value="Submit">
 </form>
+<h3>Download File</h3>
+<form method="post" action="{% url 'spreadsheet:display_csv' sheet.id %}">
+    {% csrf_token %}
+    <input type="submit" value="Download csv">
+</form>
 </body>
 </html>
