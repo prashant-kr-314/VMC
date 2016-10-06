@@ -1,0 +1,13 @@
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+    font-size:30px;
+    line-height: 50px;
+}
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+    color: #fff;
+}
+
+form  {
+   line-height: 50px;
+}

@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<form method="post" action="{% url 'spreadsheet:edit_row' sheet.id row_id %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="container-fluid" style="margin-left:20px;">
+        <div class="row">
+            <form method="post" action="{% url 'spreadsheet:edit_row' sheet.id row_id %}">
+                <div class="col-xs-6 col-lg-2">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
