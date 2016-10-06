@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^delete_row/(?P<sheet_id>[0-9]+)/$', views.delete_row, name='delete_row'),
     url(r'^edit_row/(?P<sheet_id>[0-9]+)/(?P<row_id>[0-9]+)/$', views.edit_row, name='edit_row'),
     url(r'^delete_sheet/$', views.delete_sheet, name='delete_sheet'),
+    url(r'^display_csv/(?P<sheet_id>[0-9]+)/$', views.display_csv, name='display_csv'),
 ]
