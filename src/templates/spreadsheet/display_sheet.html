@@ -1,83 +1,134 @@
 {% extends 'base.html' %}
 
+
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <table class="table table-bordered" border="1">
-                <tr>
-                    {% for column in columns %}
-                        <th>{{ column.name }}</th>
-                    {% endfor %}
-                    <th></th>
-                    <th></th>
-                </tr>
-                {% for row_num, row in rows %}
-                    <tr>
-                        {% for cell in row %}
-                            <td>{{ cell.value }}</td>
-                        {% endfor %}
-                        <td>
-                            <form method="post" action="{% url 'spreadsheet:delete_row' sheet.id %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="row_id" value="{{ row_num }}">
-                                <button type="submit" class="btn btn-danger">Delete Row</button>
-                            </form>
-                        </td>
-                        <td><a href="{% url 'spreadsheet:edit_row' sheet.id row_num %}" style="color:white;">
-                            <button class="btn btn-success">Edit Row</button>
-                        </a></td>
-                    </tr>
+<div class="container-fluid">
+    <div class="row">
+        <table class="table table-bordered" border="1">
+            <tr>
+                {% for column in columns %} 
+                {% load spreadsheet_extras %}
+                <th>
+                    {{ forloop.counter|asci }}
+                </th>
                 {% endfor %}
-                <tr>
-                    {% for column in columns %}
-                        <td>
-                            <form method="post" action="{% url 'spreadsheet:delete_column' sheet.id %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="delete_column" value={{ column.id }}>
-                                <button type="submit" class="btn btn-danger">Delete Column</button>
-                            </form>
-                        </td>
-                    {% endfor %}
-                <td colspan="2" class="text-center"><a href="{% url 'spreadsheet:display_csv' sheet.id %}">
-                            <button class="btn btn-primary btn">Download Sheet</button>
-                        </a></td>
-                </tr>
-            </table>
-        </div>
+            </tr>
+            <tr>
+                {% for column in columns %}
+                <th>{{ column.name }}</th>
+                {% endfor %}
+                <th></th>
+                <th></th>
+            </tr>
+            {% for row_num, row in rows %}
+            <tr>
+                {% for cell in row %}
+                <td class="{{ column.id }} {{ forloop.counter }}">{%firstof cell.value "" %}</td>
+                {% endfor %}
+                <td>
+                    <form method="post" action="{% url 'spreadsheet:delete_row' sheet.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="row_id" value="{{ row_num }}">
+                        <button type="submit" class="btn btn-danger">Delete Row</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="{% url 'spreadsheet:edit_row' sheet.id row_num %}" style="color:white;">
+                        <button class="btn btn-success">Edit Row</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                {% for column in columns %}
+                <td>
+                    <form method="post" action="{% url 'spreadsheet:delete_column' sheet.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete_column" value={{ column.id }}>
+                        <button type="submit" class="btn btn-danger">Delete Column</button>
+                    </form>
+                </td>
+                {% endfor %}
+                <td colspan="2" class="text-center">
+                    <a href="{% url 'spreadsheet:display_csv' sheet.id %}">
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <center>
+            <a href="{% url 'spreadsheet:display_csv' sheet.id %}">
+                <button class="btn btn-primary btn-lg">Download Sheet</button>
+            </a>
+        </center>
+        <br>
+        <br>
     </div>
+</div>
 
-    <h3 class="text-center">Add Column</h3>
-    <br>
-    <br>
 
-    <form class="text-center" method="post" action="{% url 'spreadsheet:add_column' sheet.id %}">
-        {% csrf_token %}
-        {{ add_column_form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
+{%if not columns%}
+<br>
+<br>
+<br>
+<h3 class="text-center">Upload Csv</h3>
+<center>
+    <form enctype="multipart/form-data" action="{% url 'spreadsheet:add_csv' sheet.id %}" method="post">
+        {% csrf_token %} {{csv_form.as_p}}
+        <input class="btn btn-primary " type="submit" value="Submit" />
     </form>
+</center>
+<br>
+<br>
+<br> 
+{%endif%}
 
-    <br>
-    <br>
-    <br>
 
-    <div class="container-fluid" style="margin-left:20px;">
-        <div class="row">
-            <h3>Add Row</h3>
 
-            <form method="post" action="{% url 'spreadsheet:add_row' sheet.id %}">
-                <div class="col-xs-6 col-lg-2">
-                    {% csrf_token %}
-                    {{ add_row_form.as_p }}
-                    <button type="submit" class="btn btn-primary btn">Submit</button>
-                </div>
-            </form>
-        </div>
+<h3 class="text-center">Add Column</h3>
+<br>
+<br>
+<form class="text-center" method="post" action="{% url 'spreadsheet:add_column' sheet.id %}">
+    {% csrf_token %} 
+    {{ add_column_form.as_p }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<center><h3 class="text-center">Add Multiple Column</h3>
+<form method="post" action="{% url 'spreadsheet:add_multiple_columns' sheet.id %}">
+    {% csrf_token %} 
+    {{add_multiple_columns.as_p}}
+    <input type="submit" class="btn btn-primary" value="Submit" />
+</form></center>
+
+<center><h3 class="text-center">Add Multiple Row</h3>
+<form method="post" action="{% url 'spreadsheet:add_multiple_rows' sheet.id %}">
+    {% csrf_token %} 
+    {{add_multiple_rows.as_p}}
+    <input type="submit" class="btn btn-primary" value="Submit" />
+</form></center>
+<br>
+<br>
+<br>
+<div class="container-fluid" style="margin-left:20px;">
+    <div class="row">
+        <h3>Add Row</h3>
+        <form method="post" action="{% url 'spreadsheet:add_row' sheet.id %}">
+            <div class="col-lg-1">
+                {% csrf_token %} 
+                {{ add_row_form.as_p }}
+                <button type="submit" class="btn btn-primary btn">Submit</button>
+            </div>
+        </form>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 {% endblock %}
