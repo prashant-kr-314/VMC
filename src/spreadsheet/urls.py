@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from spreadsheet import views
+from spreadsheet import test
 
 urlpatterns = [
     url(r'^$', views.home, name='all_sheets'),
@@ -11,4 +12,8 @@ urlpatterns = [
     url(r'^edit_row/(?P<sheet_id>[0-9]+)/(?P<row_id>[0-9]+)/$', views.edit_row, name='edit_row'),
     url(r'^delete_sheet/$', views.delete_sheet, name='delete_sheet'),
     url(r'^display_csv/(?P<sheet_id>[0-9]+)/$', views.display_csv, name='display_csv'),
-]
+    url(r'^add_multiple_columns/(?P<sheet_id>[0-9]+)/$', views.add_multiple_columns, name='add_multiple_columns'),
+    url(r'^add_multiple_rows/(?P<sheet_id>[0-9]+)/$', views.add_multiple_rows, name='add_multiple_rows'),
+    url(r'^add_csv/(?P<sheet_id>[0-9]+)/$', views.add_csv, name='add_csv'),
+       
+    ]
