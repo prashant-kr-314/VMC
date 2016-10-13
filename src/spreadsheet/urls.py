@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from spreadsheet import views
-from spreadsheet import test
 
 urlpatterns = [
     url(r'^$', views.home, name='all_sheets'),
